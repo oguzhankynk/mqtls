@@ -1,0 +1,70 @@
+---
+# clang-tidy. Only CXX_CLANG_TIDY'd targets are 'mqtls'
+# and 'mqtls_mq' (cmake/ClangTidy.cmake), so this applies to include/ and
+# src/ only.
+#
+# NOTE: `Checks:` below is a single YAML block scalar (`>`), so every line in
+# it is literal content of that string, INCLUDING lines starting with '#' —
+# real YAML comments documenting individual exclusions must go here, above
+# the key, not inside the block.
+#
+# -cppcoreguidelines-pro-type-vararg: OpenSSL's C API is vararg-heavy
+#   (SSL_CTX_ctrl-based macros etc.); not a type-safety smell in that context.
+# -cppcoreguidelines-pro-type-reinterpret-cast: mqtls bridges
+#   std::span<std::byte>/std::span<const std::byte> to POSIX and OpenSSL C
+#   APIs that take char*/void*/unsigned char*; that cast is the point of
+#   those call sites, and it recurs throughout src/mq and src/tls.
+Checks: >
+  -*,
+  bugprone-*,
+  cert-*,
+  clang-analyzer-*,
+  concurrency-*,
+  cppcoreguidelines-*,
+  misc-*,
+  modernize-*,
+  performance-*,
+  portability-*,
+  readability-*,
+  -modernize-use-trailing-return-type,
+  -cppcoreguidelines-pro-type-vararg,
+  -cppcoreguidelines-pro-type-reinterpret-cast,
+  -cppcoreguidelines-avoid-non-const-global-variables,
+  -readability-identifier-length,
+  -misc-non-private-member-variables-in-classes,
+  -cert-err58-cpp
+
+WarningsAsErrors: ''
+HeaderFilterRegex: '^(include|src)/.*'
+FormatStyle: file
+InheritParentConfig: false
+
+CheckOptions:
+  - key: readability-identifier-naming.ClassCase
+    value: CamelCase
+  - key: readability-identifier-naming.StructCase
+    value: CamelCase
+  - key: readability-identifier-naming.FunctionCase
+    value: lower_case
+  - key: readability-identifier-naming.VariableCase
+    value: lower_case
+  - key: readability-identifier-naming.PrivateMemberSuffix
+    value: '_'
+  - key: readability-identifier-naming.ProtectedMemberSuffix
+    value: '_'
+  - key: readability-identifier-naming.EnumCase
+    value: CamelCase
+  - key: readability-identifier-naming.EnumConstantCase
+    value: lower_case
+  - key: readability-identifier-naming.NamespaceCase
+    value: lower_case
+  - key: readability-identifier-naming.GlobalConstantCase
+    value: CamelCase
+  - key: readability-identifier-naming.GlobalConstantPrefix
+    value: 'k'
+  - key: readability-identifier-naming.ConstexprVariableCase
+    value: CamelCase
+  - key: readability-identifier-naming.ConstexprVariablePrefix
+    value: 'k'
+  - key: cppcoreguidelines-avoid-do-while.IgnoreMacros
+    value: true
