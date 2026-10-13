@@ -154,7 +154,12 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y ninja-build libssl-dev gcovr
+          sudo apt-get install -y ninja-build libssl-dev
+          # Ubuntu 22.04's apt package is gcovr 5.0, where
+          # --gcov-ignore-parse-errors takes no value (plain store_true);
+          # cmake/Coverage.cmake relies on the newer choices= form
+          # (negative_hits.warn), introduced in gcovr 6.0+.
+          pip install "gcovr==8.6"
       - name: Configure and build
         run: |
           cmake --preset coverage
