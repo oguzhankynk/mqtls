@@ -1,4 +1,4 @@
-# mqtls — a TLS layer over POSIX message queue 
+# mqtls — mutually authenticated TLS 1.3 over any byte-stream transport
 
 **mqtls** is a C++17 library for Linux that carries a mutually authenticated
 TLS 1.3 session over a byte-stream transport you choose. The core library
